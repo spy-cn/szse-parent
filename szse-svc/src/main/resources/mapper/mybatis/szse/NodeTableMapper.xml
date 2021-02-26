@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spy.szse.svc.mapper.szse.NodeTableMapper">
+    <select id="getById" resultType="com.spy.szse.domain.entity.NodeTable">
+        SELECT * FROM node_table where id =#{id}
+    </select>
+</mapper>
+
+
