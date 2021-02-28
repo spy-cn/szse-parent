@@ -11,6 +11,11 @@
 
     <artifactId>szse-domain</artifactId>
     <dependencies>
+        <dependency>
+            <groupId>com.spy</groupId>
+            <artifactId>szse-common</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
         <!--mybatis-->
         <dependency>
             <groupId>mysql</groupId>

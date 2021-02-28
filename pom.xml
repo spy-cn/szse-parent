@@ -30,6 +30,7 @@
         <alibaba.version>2.2.1.RELEASE</alibaba.version>
         <lombok.version>1.18.10</lombok.version>
         <apache.version>3.8.1</apache.version>
+        <commons-collections4.version>4.1</commons-collections4.version>
     </properties>
     <!--
        配置 dependencyManagement 锁定依赖的版本，</br>
@@ -93,6 +94,11 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>${apache.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
+                <version>${commons-collections4.version}</version>
             </dependency>
         </dependencies>
 
