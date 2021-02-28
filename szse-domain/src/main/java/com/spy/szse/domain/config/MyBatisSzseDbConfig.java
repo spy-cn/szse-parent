@@ -17,12 +17,12 @@ import java.io.IOException;
  * @Author lei.zhao_ext
  * @Date 2021/2/26
  */
-@Configuration
+/*@Configuration
 @MapperScan(basePackages = {MyBatisSzseDbConfig.BASE_PACKAGES},
-        sqlSessionTemplateRef = "sqlSessionTemplate")
+        sqlSessionTemplateRef = "sqlSessionTemplate")*/
 public class MyBatisSzseDbConfig {
 
-    public static final String BASE_PACKAGES = "com.spy.szse.svc.mapper.szse";
+/*    public static final String BASE_PACKAGES = "com.spy.szse.svc.mapper.szse";
 
     public SqlSessionTemplate sqlSessionTemplate(@Qualifier("szseDataSource") DataSource dataSource) throws Exception {
         return new SqlSessionTemplate(sqlSessionFactory(dataSource));
@@ -33,5 +33,5 @@ public class MyBatisSzseDbConfig {
         bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResource("classpath:mapper/mybatis/szse/*.xml"));
         bean.getObject().getConfiguration().setMapUnderscoreToCamelCase(true);
         return bean.getObject();
-    }
+    }*/
 }
