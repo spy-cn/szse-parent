@@ -32,7 +32,7 @@ public class Swagger2Config {
                 .apiInfo(apiInfo())
                 .select()
                 //只显示controller路径下的页面
-                //.apis(RequestHandlerSelectors.basePackage("com.spy.szse.svc.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.spy.szse.svc.controller"))
                 .paths(Predicates.and(PathSelectors.regex("/controller/.*")))
                 .build();
     }

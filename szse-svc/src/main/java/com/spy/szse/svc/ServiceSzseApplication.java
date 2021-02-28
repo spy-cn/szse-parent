@@ -6,6 +6,7 @@ import com.google.common.base.Predicates;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.service.ApiInfo;
@@ -20,6 +21,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  */
 @EnableSwagger2
 @SpringBootApplication
+@ComponentScan({"com.spy.szse.domain","com.spy.szse.common","com.spy.szse.svc"})
 public class ServiceSzseApplication {
     public static void main(String[] args) {
         SpringApplication.run(ServiceSzseApplication.class, args);
