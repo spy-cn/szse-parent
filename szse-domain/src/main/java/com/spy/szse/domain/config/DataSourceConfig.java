@@ -14,9 +14,9 @@ import javax.sql.DataSource;
  * @Author lei.zhao_ext
  * @Date 2021/2/26
  */
-@Configuration
+//@Configuration
 public class DataSourceConfig {
-    public DataSourceConfig() {
+   /* public DataSourceConfig() {
         System.err.println("======DataSourceConfig");
     }
 
@@ -24,5 +24,5 @@ public class DataSourceConfig {
     @ConfigurationProperties(prefix = "spring.datasource.szse")
     public DataSource szseDataSource() {
         return DataSourceBuilder.create().build();
-    }
+    }*/
 }

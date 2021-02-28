@@ -39,7 +39,7 @@ public class NodeTableController {
     }
 
     @ApiOperation(value = "根据ID插询", notes = "id查询接口")
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity getNodeTableById(@ApiParam("id") @PathVariable("id") Long id) {
         return ResponseEntity.ok(nodeTableMapper.getById(id));
     }
