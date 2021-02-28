@@ -1,4 +1,4 @@
-package com.spy.szse.service.common.config;
+package com.spy.szse.common.config;
 
 import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
 import com.google.common.base.Predicates;
