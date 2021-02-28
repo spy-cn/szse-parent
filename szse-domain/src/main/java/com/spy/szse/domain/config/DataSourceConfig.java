@@ -14,11 +14,15 @@ import javax.sql.DataSource;
  * @Author lei.zhao_ext
  * @Date 2021/2/26
  */
-//@Configuration
+@Configuration
 public class DataSourceConfig {
-  /*  @Bean("szseDataSource")
+    public DataSourceConfig() {
+        System.err.println("======DataSourceConfig");
+    }
+
+    @Bean("szseDataSource")
     @ConfigurationProperties(prefix = "spring.datasource.szse")
-    public DataSource testDataSource() {
+    public DataSource szseDataSource() {
         return DataSourceBuilder.create().build();
-    }*/
+    }
 }
