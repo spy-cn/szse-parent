@@ -36,4 +36,11 @@ public interface NodeTableMapper {
      * @return
      */
     List<NodeTable> getProductByKeyword(@Param("name") String keywordLike, @Param("code") String keywordLike1);
+
+    /**
+     * @param productCode
+     * @param value
+     * @return
+     */
+    NodeTable getByCode(@Param("productCode") String productCode, @Param("value") Integer value);
 }

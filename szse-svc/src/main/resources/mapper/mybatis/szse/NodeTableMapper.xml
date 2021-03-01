@@ -18,6 +18,10 @@
         FROM node_table
         WHERE CODE LIKE #{code} OR NAME LIKE #{name} AND status=1
     </select>
+    <!---->
+    <select id="getByCode" resultType="com.spy.szse.domain.entity.NodeTable">
+        SELECT * FROM node_table WHERE CODE=#{productCode} AND STATUS =#{value}
+    </select>
 </mapper>
 
 
