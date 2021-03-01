@@ -6,6 +6,12 @@
     <select id="getById" resultType="com.spy.szse.domain.entity.NodeTable">
         SELECT * FROM node_table where id =#{id}
     </select>
+    <!--获取产品树-->
+    <select id="getProductAll" resultType="com.spy.szse.domain.entity.NodeTable">
+        SELECT NAME,CODE,parent,LEVEL,source,version_id,sequence
+        FROM node_table
+        WHERE STATUS=1
+    </select>
 </mapper>
 
 

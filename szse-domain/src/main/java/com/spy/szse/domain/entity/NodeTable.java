@@ -15,6 +15,7 @@ public class NodeTable {
     private Integer level;
     private String source;
     private Integer isLeaf;
+    private String parent;
     private String ancestors;
     private String name;
     private String remark;
