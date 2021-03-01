@@ -1,6 +1,7 @@
 package com.spy.szse.svc.controller;
 
 import com.spy.szse.svc.mapper.szse.NodeTableMapper;
+import com.spy.szse.svc.response.ProductKeywordResp;
 import com.spy.szse.svc.response.ProductTreeResp;
 import com.spy.szse.svc.service.NodeTableService;
 import io.swagger.annotations.*;
@@ -8,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+
+import java.util.List;
 
 import static com.spy.szse.common.util.SzseUtil.isBlankException;
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -25,6 +28,16 @@ public class NodeTableController {
 
     @Resource
     private NodeTableService nodeTableService;
+
+
+    @ApiOperation("根据关键字(中文或编码)查询客户产品")
+    @GetMapping("/")
+    public ResponseEntity getProductByKeyword(@ApiParam(value = "关键字产品中文名称或者英文编码") @RequestParam String keyword,
+                                              @ApiParam(value = "每页数量") @RequestParam(required = false, defaultValue = "20") Integer limit) {
+        isBlankException(isBlank(keyword), keyword);
+        List<ProductKeywordResp> resp = nodeTableService.getProductByKeyword(keyword, limit);
+        return ResponseEntity.ok(resp);
+    }
 
     @ApiOperation("客户产品树查询")
     @GetMapping("/tree")

@@ -12,6 +12,12 @@
         FROM node_table
         WHERE STATUS=1
     </select>
+    <!--根据关键字查询产品-->
+    <select id="getProductByKeyword" resultType="com.spy.szse.domain.entity.NodeTable">
+        SELECT *
+        FROM node_table
+        WHERE CODE LIKE #{code} OR NAME LIKE #{name} AND status=1
+    </select>
 </mapper>
 
 

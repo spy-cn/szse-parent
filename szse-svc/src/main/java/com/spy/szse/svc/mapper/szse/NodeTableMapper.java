@@ -23,7 +23,17 @@ public interface NodeTableMapper {
 
     /**
      * 获取产品树
+     *
      * @return
      */
     List<NodeTable> getProductAll();
+
+    /**
+     * 根据关键字查询客户产品
+     *
+     * @param keywordLike  产品中文名称关键字
+     * @param keywordLike1 产品编码关键字
+     * @return
+     */
+    List<NodeTable> getProductByKeyword(@Param("name") String keywordLike, @Param("code") String keywordLike1);
 }
