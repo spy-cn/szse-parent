@@ -6,6 +6,12 @@
     <select id="getRelationship" resultType="com.spy.szse.domain.entity.RelationshipTable">
         SELECT *
         FROM relationship_table
-        WHERE
+        WHERE status =#{value} and head_node_code=#{productCode} and tail_node_code =#{targetCode} and relationship =#{direction}
+    </select>
+
+    <select id="getProductStreamByUpstream" resultType="com.spy.szse.domain.entity.RelationshipTable">
+        SELECT *
+        FROM relationship_table
+        WHERE head_node_code=#{code} and status=1
     </select>
 </mapper>
