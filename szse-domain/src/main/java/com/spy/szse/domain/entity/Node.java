@@ -19,4 +19,11 @@ public class Node {
     private Integer downStreamCount;
     @ApiModelProperty("产品的上游产品数量")
     private Integer upStreamCount;
+
+    public Node(String name, String productCode, Integer downStreamCount, Integer upStreamCount) {
+        this.name = name;
+        this.productCode = productCode;
+        this.downStreamCount = downStreamCount;
+        this.upStreamCount = upStreamCount;
+    }
 }
