@@ -1,15 +1,22 @@
 package com.spy.szse.svc.service.impl;
 
 import com.spy.szse.common.constant.SzseConstant;
+import com.spy.szse.common.enums.ErrorEnum;
 import com.spy.szse.common.enums.StatusEnum;
+import com.spy.szse.common.exception.SzseException;
+import com.spy.szse.common.util.SzseHttpRequestUtil;
 import com.spy.szse.domain.entity.Node;
 import com.spy.szse.domain.entity.NodeTable;
 import com.spy.szse.domain.entity.RelationshipTable;
 import com.spy.szse.svc.mapper.szse.RelationshipTableMapper;
 import com.spy.szse.svc.mapper.szse.NodeTableMapper;
+import com.spy.szse.svc.request.UpdateRelationRequest;
 import com.spy.szse.svc.response.RelationshipNodeResp;
 import com.spy.szse.svc.service.RelationshipTableService;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.internal.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -89,5 +96,105 @@ public class RelationshipTableServiceImpl implements RelationshipTableService {
             return nodeResp;
         }).collect(Collectors.toList());
         return respList;
+    }
+
+    /**
+     * 更新产品的上下游关系
+     *
+     * @param request
+     * @return
+     */
+    @Override
+    public List<RelationshipNodeResp> updateRelationship(UpdateRelationRequest request) {
+
+        String productCode = request.getProductCode();
+        boolean isDownDirection = SzseConstant.DOWN_DIRECTION.equals(request.getDirection());
+        //组装Relationship对象
+        RelationshipTable downRelationshipTable = generatorRelationNode(request, request.getDownRelation());
+        RelationshipTable upRelationshipTable = generatorRelationNode(request, request.getUpRelation());
+        downRelationshipTable.setHeadType(upRelationshipTable.getTailType());
+        upRelationshipTable.setTailType(downRelationshipTable.getTailType());
+
+        RelationshipTable oldDownRelationship = getRelationshipTable(downRelationshipTable);
+        if (ObjectUtils.isEmpty(oldDownRelationship)) {
+            throw new SzseException(ErrorEnum.ERROR_NOT_EMPTY, oldDownRelationship);
+        }
+        int updateCount = 0;
+        if (existsChange(oldDownRelationship, downRelationshipTable)) {
+            updateCount++;
+        }
+        RelationshipTable oldUpRelationship = getRelationshipTable(upRelationshipTable);
+        if (ObjectUtils.isEmpty(oldUpRelationship)) {
+            throw new SzseException(ErrorEnum.ERROR_NOT_EMPTY, upRelationshipTable);
+        }
+        if (existsChange(oldUpRelationship, upRelationshipTable)) {
+            updateCount++;
+        }
+        if (updateCount > 0) {
+            List<RelationshipTable> updateList = new ArrayList<>();
+            updateList.add(setWeightAndType(oldUpRelationship, upRelationshipTable));
+        }
+        return null;
+    }
+
+    //TODO
+    private RelationshipTable setWeightAndType(RelationshipTable oldUpRelationship, RelationshipTable upRelationshipTable) {
+
+        return null;
+    }
+
+    private boolean existsChange(RelationshipTable oldRelationship, RelationshipTable newRelationship) {
+        if (!Objects.equals(oldRelationship.getWeight(), newRelationship.getWeight())) {
+            return true;
+        }
+        if (!Objects.equals(oldRelationship.getTailType(), newRelationship.getTailType())) {
+            return true;
+        }
+        return false;
+    }
+
+    private RelationshipTable getRelationshipTable(RelationshipTable relationshipTable) {
+        String headNodeCode = relationshipTable.getHeadNodeCode();
+        String tailNodeCode = relationshipTable.getTailNodeCode();
+        Integer relationship = relationshipTable.getRelationship();
+        List<RelationshipTable> relationshipTableList = relationshipTableMapper.getByHeadCodeAndTailCodeAndRelationship(headNodeCode, tailNodeCode, relationship, StatusEnum.VALID.getValue());
+        if (CollectionUtils.isEmpty(relationshipTableList)) {
+            return null;
+        }
+        return relationshipTableList.get(0);
+    }
+
+    /**
+     * 组装上下游关系
+     *
+     * @param request
+     * @return
+     */
+    private RelationshipTable generatorRelationNode(UpdateRelationRequest request, UpdateRelationRequest.RelationMetadata relation) {
+        boolean isDownDirection = SzseConstant.DOWN_DIRECTION.equals(request.getDirection());
+        //UpdateRelationRequest.RelationMetadata downRelation1 = request.getDownRelation();
+        String productCode = request.getProductCode();
+        String targetCode = request.getTargetCode();
+        Integer direction = request.getDirection();
+        //UpdateRelationRequest.RelationMetadata downRelation = request.getDownRelation();
+        Integer weight = relation.getWeight();
+        String relationType = relation.getRelationType();
+        RelationshipTable relationshipTable = new RelationshipTable();
+        //更新人
+        relationshipTable.setUpdatedBy(SzseHttpRequestUtil.getUsername());
+        //状态
+        relationshipTable.setStatus(SzseConstant.DEFAULT_STATUS);
+        //节点类型
+        relationshipTable.setTailType(relationType);
+        //权重
+        relationshipTable.setWeight(weight);
+        if (SzseConstant.DOWN_DIRECTION.equals(direction)) {
+            relationshipTable.setHeadNodeCode(isDownDirection ? productCode : targetCode);
+            relationshipTable.setTailNodeCode(isDownDirection ? targetCode : productCode);
+        } else {
+            relationshipTable.setHeadNodeCode(isDownDirection ? targetCode : productCode);
+            relationshipTable.setTailNodeCode(isDownDirection ? productCode : targetCode);
+        }
+        return relationshipTable;
     }
 }

@@ -14,4 +14,11 @@
         FROM relationship_table
         WHERE head_node_code=#{code} and status=1
     </select>
+
+    <select id="getByHeadCodeAndTailCodeAndRelationship" resultType="com.spy.szse.domain.entity.RelationshipTable">
+        SELECT
+        FROM relationship_table
+        WHERE head_node_code=#{headNodeCode} and tail_node_code=#{tailNodeCode} and relationship=#{relationship} and status=#{status}
+
+    </select>
 </mapper>
