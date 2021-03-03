@@ -1,5 +1,6 @@
 package com.spy.szse.svc.service;
 
+import com.spy.szse.svc.request.UpdateRelationRequest;
 import com.spy.szse.svc.response.RelationshipNodeResp;
 
 import java.util.List;
@@ -18,4 +19,12 @@ public interface RelationshipTableService {
      * @return
      */
     List<RelationshipNodeResp> getRelationship(String productCode, String targetCode, Integer direction);
+
+    /**
+     * 更新产品节点的上下游关系
+     *
+     * @param request
+     * @return
+     */
+    List<RelationshipNodeResp> updateRelationship(UpdateRelationRequest request);
 }
