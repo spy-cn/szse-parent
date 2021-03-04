@@ -11,6 +11,7 @@ import com.spy.szse.domain.entity.RelationshipTable;
 import com.spy.szse.svc.mapper.szse.RelationshipTableMapper;
 import com.spy.szse.svc.mapper.szse.NodeTableMapper;
 import com.spy.szse.svc.request.UpdateRelationRequest;
+import com.spy.szse.svc.response.DeleteResp;
 import com.spy.szse.svc.response.RelationshipNodeResp;
 import com.spy.szse.svc.service.RelationshipTableService;
 import org.apache.commons.collections4.CollectionUtils;
@@ -139,7 +140,20 @@ public class RelationshipTableServiceImpl implements RelationshipTableService {
                 throw new SzseException(ErrorEnum.ERROR_UPDATE_STREAM, productCode, request.getTargetCode());
             }
         }
-        return getRelationship(productCode,request.getTargetCode(),request.getRelationship());
+        return getRelationship(productCode, request.getTargetCode(), request.getRelationship());
+    }
+
+    /**
+     * 删除产品节点的上下游关系
+     *
+     * @param username
+     * @param headNodeCode
+     * @param tailNodeCode
+     * @return
+     */
+    @Override
+    public DeleteResp deleteRelationship(String username, String headNodeCode, String tailNodeCode) {
+        return null;
     }
 
     /**

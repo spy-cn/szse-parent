@@ -1,6 +1,7 @@
 package com.spy.szse.svc.controller;
 
 import com.spy.szse.svc.request.UpdateRelationRequest;
+import com.spy.szse.svc.response.DeleteResp;
 import com.spy.szse.svc.response.RelationshipNodeResp;
 import com.spy.szse.svc.service.RelationshipTableService;
 import io.swagger.annotations.Api;
@@ -27,6 +28,16 @@ import static com.spy.szse.common.util.SzseUtil.anyBlank;
 public class RelationshipTableController {
     @Resource
     private RelationshipTableService relationshipTableService;
+
+    @ApiOperation("删除产品之间上下游关系")
+    @DeleteMapping("/del")
+    public ResponseEntity deleteRelationship(@ApiParam("请求头参数用户名") @RequestHeader String username,
+                                             @ApiParam("上游产品code") @RequestParam String headNodeCode,
+                                             @ApiParam("下游产品code") @RequestParam String tailNodeCode) {
+        isBlankException(anyBlank(username, headNodeCode, tailNodeCode), "username,headNodeCode or tailNodeCode is empty");
+        DeleteResp resp = relationshipTableService.deleteRelationship(username, headNodeCode, tailNodeCode);
+        return ResponseEntity.ok(resp);
+    }
 
     @ApiOperation("更新产品与产品之间的上下游关系")
     @PutMapping("/updateRelation")
