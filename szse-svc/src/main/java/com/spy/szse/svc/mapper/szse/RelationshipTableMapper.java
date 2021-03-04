@@ -54,4 +54,14 @@ public interface RelationshipTableMapper {
      * @return
      */
     int updateRelation(RelationshipTable relationshipTable);
+
+    /**
+     * 删除上游关系
+     *
+     * @param relationshipTables
+     * @param username
+     * @return
+     */
+    int deleteByHeadNodeCodeAndTailNodeCode(@Param("list") List<RelationshipTable> relationshipTables,
+                                                @Param("username") String username);
 }
