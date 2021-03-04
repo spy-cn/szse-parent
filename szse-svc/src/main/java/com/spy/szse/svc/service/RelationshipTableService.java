@@ -1,6 +1,7 @@
 package com.spy.szse.svc.service;
 
 import com.spy.szse.svc.request.UpdateRelationRequest;
+import com.spy.szse.svc.response.DeleteResp;
 import com.spy.szse.svc.response.RelationshipNodeResp;
 
 import java.util.List;
@@ -27,4 +28,14 @@ public interface RelationshipTableService {
      * @return
      */
     List<RelationshipNodeResp> updateRelationship(UpdateRelationRequest request);
+
+    /**
+     * 删除产品节点的上下游关系
+     *
+     * @param username
+     * @param headNodeCode
+     * @param tailNodeCode
+     * @return
+     */
+    DeleteResp deleteRelationship(String username, String headNodeCode, String tailNodeCode);
 }
