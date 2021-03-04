@@ -16,9 +16,38 @@
     </select>
 
     <select id="getByHeadCodeAndTailCodeAndRelationship" resultType="com.spy.szse.domain.entity.RelationshipTable">
-        SELECT
+        SELECT *
         FROM relationship_table
         WHERE head_node_code=#{headNodeCode} and tail_node_code=#{tailNodeCode} and relationship=#{relationship} and status=#{status}
 
     </select>
+    <!--更新上下游关系-->
+    <update id="updateRelation" parameterType="com.spy.szse.domain.entity.RelationshipTable">
+        update
+        relationship_table
+        <set>
+            <if test="headNodeCode != null">
+                head_node_code = #{headNodeCode},
+            </if>
+            <if test="tailNodeCode != null">
+                tail_node_code = #{tailNodeCode},
+            </if>
+            <if test="weight != null">
+                weight = #{weight},
+            </if>
+            <if test="relationship != null">
+                relationship = #{relationship},
+            </if>
+            <if test="headType != null">
+                head_type = #{headType},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="updatedBy != null">
+                updated_by = #{updatedBy},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
 </mapper>

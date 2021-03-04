@@ -1,6 +1,5 @@
 package com.spy.szse.svc.controller;
 
-import com.spy.szse.svc.request.UpdateRelationReq;
 import com.spy.szse.svc.request.UpdateRelationRequest;
 import com.spy.szse.svc.response.RelationshipNodeResp;
 import com.spy.szse.svc.service.RelationshipTableService;
@@ -40,9 +39,9 @@ public class RelationshipTableController {
     @GetMapping("/")
     public ResponseEntity getRelationship(@ApiParam("产品Code") @RequestParam String productCode,
                                           @ApiParam("目标产品Code") @RequestParam String targetCode,
-                                          @ApiParam("-1上游 1下游") @RequestParam Integer direction) {
+                                          @ApiParam("-1上游 1下游") @RequestParam Integer relationship) {
         isBlankException(anyBlank(productCode, targetCode), "productCode and targetCode");
-        List<RelationshipNodeResp> respList = relationshipTableService.getRelationship(productCode, targetCode, direction);
+        List<RelationshipNodeResp> respList = relationshipTableService.getRelationship(productCode, targetCode, relationship);
         return ResponseEntity.ok(respList);
     }
 }
