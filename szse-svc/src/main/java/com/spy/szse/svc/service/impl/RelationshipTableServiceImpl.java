@@ -18,6 +18,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.internal.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -108,7 +109,7 @@ public class RelationshipTableServiceImpl implements RelationshipTableService {
     public List<RelationshipNodeResp> updateRelationship(UpdateRelationRequest request) {
 
         String productCode = request.getProductCode();
-        boolean isDownDirection = SzseConstant.DOWN_DIRECTION.equals(request.getDirection());
+        boolean isDownDirection = SzseConstant.DOWN_DIRECTION.equals(request.getRelationship());
         //组装Relationship对象
         RelationshipTable downRelationshipTable = generatorRelationNode(request, request.getDownRelation());
         RelationshipTable upRelationshipTable = generatorRelationNode(request, request.getUpRelation());
@@ -133,14 +134,46 @@ public class RelationshipTableServiceImpl implements RelationshipTableService {
         if (updateCount > 0) {
             List<RelationshipTable> updateList = new ArrayList<>();
             updateList.add(setWeightAndType(oldUpRelationship, upRelationshipTable));
+            updateList.add(setWeightAndType(oldUpRelationship, downRelationshipTable));
+            if (!isUpdateRelation(updateList)) {
+                throw new SzseException(ErrorEnum.ERROR_UPDATE_STREAM, productCode, request.getTargetCode());
+            }
         }
-        return null;
+        return getRelationship(productCode,request.getTargetCode(),request.getRelationship());
     }
 
-    //TODO
-    private RelationshipTable setWeightAndType(RelationshipTable oldUpRelationship, RelationshipTable upRelationshipTable) {
+    /**
+     * 更新是否成功
+     *
+     * @param updateList
+     * @return
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public boolean isUpdateRelation(List<RelationshipTable> updateList) {
+        if (CollectionUtils.isEmpty(updateList)) {
+            return true;
+        }
+        //定义影响的行数
+        int affectedRows = 0;
+        for (RelationshipTable relationshipTable : updateList) {
+            affectedRows += relationshipTableMapper.updateRelation(relationshipTable);
+        }
+        boolean isSuccess = (affectedRows == updateList.size());
+        if (!isSuccess) {
+            throw new SzseException(ErrorEnum.ERROR_UPDATE_STREAM_FAIL);
+        }
+        return true;
+    }
 
-        return null;
+
+    private RelationshipTable setWeightAndType(RelationshipTable oldUpRelationship, RelationshipTable upRelationshipTable) {
+        //oldUpRelationship.setHeadNodeCode(upRelationshipTable.getHeadNodeCode());
+        oldUpRelationship.setHeadType(upRelationshipTable.getHeadType());
+        //oldUpRelationship.setTailNodeCode(upRelationshipTable.getTailNodeCode());
+        oldUpRelationship.setTailType(upRelationshipTable.getTailType());
+        oldUpRelationship.setWeight(upRelationshipTable.getWeight());
+        oldUpRelationship.setUpdatedBy(SzseHttpRequestUtil.getUsername());
+        return oldUpRelationship;
     }
 
     private boolean existsChange(RelationshipTable oldRelationship, RelationshipTable newRelationship) {
@@ -171,11 +204,11 @@ public class RelationshipTableServiceImpl implements RelationshipTableService {
      * @return
      */
     private RelationshipTable generatorRelationNode(UpdateRelationRequest request, UpdateRelationRequest.RelationMetadata relation) {
-        boolean isDownDirection = SzseConstant.DOWN_DIRECTION.equals(request.getDirection());
+        boolean isDownDirection = SzseConstant.DOWN_DIRECTION.equals(request.getRelationship());
         //UpdateRelationRequest.RelationMetadata downRelation1 = request.getDownRelation();
         String productCode = request.getProductCode();
         String targetCode = request.getTargetCode();
-        Integer direction = request.getDirection();
+        Integer direction = request.getRelationship();
         //UpdateRelationRequest.RelationMetadata downRelation = request.getDownRelation();
         Integer weight = relation.getWeight();
         String relationType = relation.getRelationType();
@@ -186,6 +219,8 @@ public class RelationshipTableServiceImpl implements RelationshipTableService {
         relationshipTable.setStatus(SzseConstant.DEFAULT_STATUS);
         //节点类型
         relationshipTable.setTailType(relationType);
+        //关系
+        relationshipTable.setRelationship(request.getRelationship());
         //权重
         relationshipTable.setWeight(weight);
         if (SzseConstant.DOWN_DIRECTION.equals(direction)) {

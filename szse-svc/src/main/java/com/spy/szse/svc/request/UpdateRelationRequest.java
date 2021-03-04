@@ -16,13 +16,13 @@ public class UpdateRelationRequest {
     @ApiModelProperty("目标产品Code")
     private String targetCode;
     @ApiModelProperty("上下游关系 -1上游 1下游")
-    private Integer direction;
+    private Integer relationship;
     @ApiModelProperty("上游关系对象")
     private RelationMetadata upRelation;
     @ApiModelProperty("下游关系对象")
     private RelationMetadata downRelation;
-    @ApiModelProperty("备注")
-    private String remark;
+    //@ApiModelProperty("备注")
+    //private String remark;
 
     @ApiModel("")
     @Data

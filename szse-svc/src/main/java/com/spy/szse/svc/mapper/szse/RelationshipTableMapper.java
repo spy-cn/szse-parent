@@ -46,4 +46,12 @@ public interface RelationshipTableMapper {
                                                                     @Param("tailNodeCode") String tailNodeCode,
                                                                     @Param("relationship") Integer relationship,
                                                                     @Param("status") Integer status);
+
+    /**
+     * 更新关系
+     *
+     * @param relationshipTable
+     * @return
+     */
+    int updateRelation(RelationshipTable relationshipTable);
 }
