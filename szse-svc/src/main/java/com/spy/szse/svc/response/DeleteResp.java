@@ -10,5 +10,12 @@ import lombok.Data;
  */
 @Data
 public class DeleteResp {
+    /**
+     * 消耗时间
+     */
+    private long took;
+    /**
+     * 营销行数
+     */
     private int result;
 }

@@ -50,4 +50,13 @@
         </set>
         where id = #{id}
     </update>
+
+    <update id="deleteByHeadNodeCodeAndTailNodeCode">
+        UPDATE relationship_table
+        SET status = 0,updated_by=#{username}
+        WHERE status = 1 AND
+        <foreach collection="list" item="item" open="(" separator="or" close=")">
+            (head_node_code=#{item.headNodeCode} AND tail_node_code=#{item.tailNodeCode})
+        </foreach>
+    </update>
 </mapper>

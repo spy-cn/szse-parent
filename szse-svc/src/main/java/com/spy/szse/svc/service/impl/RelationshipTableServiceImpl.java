@@ -17,12 +17,14 @@ import com.spy.szse.svc.service.RelationshipTableService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.StopWatch;
 import org.assertj.core.internal.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static com.spy.szse.common.util.SzseUtil.illegalException;
@@ -153,7 +155,22 @@ public class RelationshipTableServiceImpl implements RelationshipTableService {
      */
     @Override
     public DeleteResp deleteRelationship(String username, String headNodeCode, String tailNodeCode) {
-        return null;
+        DeleteResp resp = new DeleteResp();
+        StopWatch stopWatch = StopWatch.createStarted();
+        List<RelationshipTable> relationshipTables = new ArrayList<>();
+        RelationshipTable relation1 = new RelationshipTable();
+        relation1.setHeadNodeCode(headNodeCode);
+        relation1.setTailNodeCode(tailNodeCode);
+        relationshipTables.add(relation1);
+        RelationshipTable relation2 = new RelationshipTable();
+        relation2.setHeadNodeCode(tailNodeCode);
+        relation2.setTailNodeCode(headNodeCode);
+        relationshipTables.add(relation2);
+        Integer result = relationshipTableMapper.deleteByHeadNodeCodeAndTailNodeCode(relationshipTables, username);
+        stopWatch.stop();
+        resp.setTook(stopWatch.getTime(TimeUnit.SECONDS));
+        resp.setResult(result);
+        return resp;
     }
 
     /**
