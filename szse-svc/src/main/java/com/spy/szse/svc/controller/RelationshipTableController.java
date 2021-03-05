@@ -29,6 +29,13 @@ public class RelationshipTableController {
     @Resource
     private RelationshipTableService relationshipTableService;
 
+    @ApiOperation("添加产品之间上下游关系")
+    @PostMapping("/add")
+    public ResponseEntity addRelationship(@ApiParam("关系请求对象") @RequestBody UpdateRelationRequest request) {
+        List<RelationshipNodeResp> respList = relationshipTableService.addRelationship(request);
+        return ResponseEntity.ok(respList);
+    }
+
     @ApiOperation("删除产品之间上下游关系")
     @DeleteMapping("/del")
     public ResponseEntity deleteRelationship(@ApiParam("请求头参数用户名") @RequestHeader String username,

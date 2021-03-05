@@ -38,4 +38,12 @@ public interface RelationshipTableService {
      * @return
      */
     DeleteResp deleteRelationship(String username, String headNodeCode, String tailNodeCode);
+
+    /**
+     * 添加产品节点的上下游关系
+     *
+     * @param request
+     * @return
+     */
+    List<RelationshipNodeResp> addRelationship(UpdateRelationRequest request);
 }

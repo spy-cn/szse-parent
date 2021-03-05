@@ -112,7 +112,7 @@ public class RelationshipTableServiceImpl implements RelationshipTableService {
     public List<RelationshipNodeResp> updateRelationship(UpdateRelationRequest request) {
 
         String productCode = request.getProductCode();
-        boolean isDownDirection = SzseConstant.DOWN_DIRECTION.equals(request.getRelationship());
+        //boolean isDownDirection = SzseConstant.DOWN_DIRECTION.equals(request.getRelationship());
         //组装Relationship对象
         RelationshipTable downRelationshipTable = generatorRelationNode(request, request.getDownRelation());
         RelationshipTable upRelationshipTable = generatorRelationNode(request, request.getUpRelation());
@@ -143,6 +143,32 @@ public class RelationshipTableServiceImpl implements RelationshipTableService {
             }
         }
         return getRelationship(productCode, request.getTargetCode(), request.getRelationship());
+    }
+
+    /**
+     * 添加产品节点的上下游关系
+     *
+     * @param request
+     * @return
+     */
+    @Override
+    public List<RelationshipNodeResp> addRelationship(UpdateRelationRequest request) {
+        //TODO 验证参数的合法性
+        String productCode = request.getProductCode();
+        String targetCode = request.getTargetCode();
+        RelationshipTable downRelationship = generatorRelationNode(request, request.getDownRelation());
+        RelationshipTable upRelationship = generatorRelationNode(request, request.getUpRelation());
+        downRelationship.setHeadType(upRelationship.getTailType());
+        upRelationship.setTailType(downRelationship.getTailType());
+        RelationshipTable oldDownRelationshipTable = getRelationshipTable(downRelationship);
+        if (oldDownRelationshipTable != null) {
+            throw new SzseException(ErrorEnum.ERROR_INSERT_STREAM_EXIST, oldDownRelationshipTable);
+        }
+        RelationshipTable oldUpRelationshipTable = getRelationshipTable(upRelationship);
+
+
+
+        return null;
     }
 
     /**
